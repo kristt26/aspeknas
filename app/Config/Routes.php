@@ -42,6 +42,16 @@ $routes->group('pembayaran', function($routes){
     $routes->post('finish', 'Pembayaran::finish');
 });
 
+$routes->group('admin', function($routes){
+    $routes->group('klasifikasi', function($routes){
+        $routes->get('/', 'Admin\Klasifikasi::index');
+        $routes->get('read', 'Admin\Klasifiksi::read');
+        $routes->post('post', 'Admin\Klasifikasi::post');
+        $routes->put('put', 'Admin\Klasifikasi::put');
+        $routes->delete('delete/(:any)', 'Admin\Klasifikasi::delete/$1');
+    });
+});
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
