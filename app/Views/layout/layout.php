@@ -43,40 +43,49 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('home')?>">
+                <a class="nav-link" href="<?= base_url('home') ?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-server"></i>
-                    <span>Manajemen Data</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Manajemen Data:</h6>
-                        <a class="collapse-item" href="<?= base_url('admin/klasifikasi')?>">Klasifikasi</a>
-                        <a class="collapse-item" href="<?= base_url('admin/sub_klasifikasi')?>">Sub  Klasifikasi</a>
-                        <a class="collapse-item" href="cards.html">Biaya</a>
+            <?php if (session()->get('role') == 'Admin') : ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-server"></i>
+                        <span>Manajemen Data</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Manajemen Data:</h6>
+                            <a class="collapse-item" href="<?= base_url('admin/klasifikasi') ?>">Klasifikasi</a>
+                            <a class="collapse-item" href="<?= base_url('admin/sub_klasifikasi') ?>">Sub Klasifikasi</a>
+                            <a class="collapse-item" href="cards.html">Biaya</a>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('user')?>">
-                    <i class="fas fa-users"></i>
-                    <span>Manajemen User</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('kategori')?>">
-                    <i class="fas fa-file"></i>
-                    <span>Kategori</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('pengajuan')?>">
-                    <i class="fas fa-database"></i>
-                    <span>Pengajuan Berkas</span></a>
-            </li>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('user') ?>">
+                        <i class="fas fa-users"></i>
+                        <span>Manajemen User</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('kategori') ?>">
+                        <i class="fas fa-file"></i>
+                        <span>Kategori</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('pengajuan') ?>">
+                        <i class="fas fa-database"></i>
+                        <span>Pengajuan Berkas</span></a>
+                </li>
+            <?php endif ?>
+
+            <?php if (session()->get('role') == 'Pendaftar') : ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('pengajuan') ?>">
+                        <i class="fas fa-list"></i>
+                        <span>Pendaftaran</span></a>
+                </li>
+            <?php endif ?>
 
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -196,8 +205,8 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    
-                    <?= $this->renderSection('content');?>
+
+                    <?= $this->renderSection('content'); ?>
 
                 </div>
                 <!-- /.container-fluid -->

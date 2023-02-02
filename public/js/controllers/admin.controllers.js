@@ -1,6 +1,7 @@
 angular.module('adminctrl', [])
     // Admin
     .controller('dashboardController', dashboardController)
+    .controller('klasifikasiController', klasifikasiController)
     .controller('subKlasifikasiController', subKlasifikasiController)
 
 
@@ -43,7 +44,9 @@ function dashboardController($scope, dashboardServices) {
     // })
 }
 
-function subKlasifikasiController($scope, klasifikasiServices, pesan) {
+
+
+function klasifikasiController($scope, klasifikasiServices, pesan, helperServices) {
     $scope.$emit("SendUp", "Pembobotan Faktor");
     $scope.datas = {};
     $scope.model = {};
@@ -82,14 +85,19 @@ function subKlasifikasiController($scope, klasifikasiServices, pesan) {
             })
         });
     }
+
+    $scope.subKlasifikasi = (param)=>{
+        document.location.href = helperServices.url + "admin/sub_klasifikasi/data/" + param.id;
+    }
 }
 
-function klasifikasiController($scope, subKlasifikasiServices, pesan) {
+function subKlasifikasiController($scope, subKlasifikasiServices, pesan, helperServices) {
     $scope.$emit("SendUp", "Pembobotan Faktor");
     $scope.datas = {};
     $scope.model = {};
-    subKlasifikasiServices.get().then((res) => {
+    subKlasifikasiServices.get(helperServices.lastPath).then((res) => {
         $scope.datas = res;
+        $scope.model.klasifikasi_id = helperServices.lastPath;
     })
 
     $scope.setInisial = (item) => {
@@ -106,6 +114,7 @@ function klasifikasiController($scope, subKlasifikasiServices, pesan) {
             } else {
                 subKlasifikasiServices.post($scope.model).then(res => {
                     $scope.model = {};
+                    $scope.model.klasifikasi_id = helperServices.lastPath;
                     pesan.Success("Berhasil menambah data");
                 })
             }

@@ -120,7 +120,7 @@ function klasifikasiServices($http, $q, helperServices, AuthService, pesan) {
                 def.resolve(res.data);
             },
             (err) => {
-                message.error(err.data.messages.error);
+                pesan.error(err.data.messages.error);
                 def.reject(err);
             }
         );
@@ -182,11 +182,12 @@ function subKlasifikasiServices($http, $q, helperServices, AuthService, pesan) {
         deleted: deleted
     };
 
-    function get() {
+    function get(id) {
+        var a = controller + 'read/' + id;
         var def = $q.defer();
         $http({
             method: 'get',
-            url: controller + 'read',
+            url: controller + 'read/' + id,
             headers: AuthService.getHeader()
         }).then(
             (res) => {
@@ -214,7 +215,7 @@ function subKlasifikasiServices($http, $q, helperServices, AuthService, pesan) {
                 def.resolve(res.data);
             },
             (err) => {
-                message.error(err.data.messages.error);
+                pesan.error(err.data.messages.error);
                 def.reject(err);
             }
         );

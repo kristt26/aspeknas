@@ -12,7 +12,7 @@
                     <h6>Input Data</h6>
                 </div>
                 <div class="card-body">
-                    <form ng-submit = "save()">
+                    <form ng-submit="save()">
                         <div class="form-group">
                             <label for="">Klasifikasi</label>
                             <input type="text" class="form-control" ng-model="model.klasifikasi" placeholder="Klasifikasi">
@@ -45,9 +45,10 @@
                                     <td>{{$index+1}}</td>
                                     <td>{{item.klasifikasi}}</td>
                                     <td class="d-flex justify-content-around">
-                                        <button class="btn btn-warning btn-sm" ng-click="edit(item)"><i class="fas fa-edit"></i>
-                                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
-                                    </button></td>
+                                        <button class="btn btn-warning btn-sm" ng-click="edit(item)"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                        <button class="btn btn-info btn-sm" ng-click="subKlasifikasi(item)"><i class="fas fa-book"></i></button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

@@ -30,33 +30,45 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::index');
+$routes->get('register', 'Auth::register');
+$routes->post('daftar', 'Auth::daftar');
+$routes->post('login', 'Auth::login');
 
-$routes->group('home', function($routes){
+$routes->group('home', function ($routes) {
     $routes->get('/', 'Admin\Home::index');
     $routes->get('token', 'Admin\Home::token');
     $routes->post('finish', 'Admin\Home::finish');
 });
-$routes->group('pembayaran', function($routes){
+$routes->group('pembayaran', function ($routes) {
     $routes->get('/', 'Pembayaran::index');
     $routes->get('token', 'Pembayaran::token');
     $routes->post('finish', 'Pembayaran::finish');
 });
 
-$routes->group('admin', function($routes){
-    $routes->group('klasifikasi', function($routes){
+$routes->group('admin', function ($routes) {
+    $routes->group('klasifikasi', function ($routes) {
         $routes->get('/', 'Admin\Klasifikasi::index');
         $routes->get('read', 'Admin\Klasifikasi::read');
         $routes->post('post', 'Admin\Klasifikasi::post');
         $routes->put('put', 'Admin\Klasifikasi::put');
         $routes->delete('delete/(:any)', 'Admin\Klasifikasi::delete/$1');
     });
-    $routes->group('sub_klasifikasi', function($routes){
-        $routes->get('/', 'Admin\SubKlasifikasi::index');
-        $routes->get('read', 'Admin\SubKlasifikasi::read');
+    $routes->group('sub_klasifikasi', function ($routes) {
+        $routes->get('data/(:any)', 'Admin\SubKlasifikasi::index/$1');
+        $routes->get('read/(:any)', 'Admin\SubKlasifikasi::read/$1');
         $routes->post('post', 'Admin\SubKlasifikasi::post');
         $routes->put('put', 'Admin\SubKlasifikasi::put');
         $routes->delete('delete/(:any)', 'Admin\SubKlasifikasi::delete/$1');
     });
+});
+
+
+$routes->group('pengajuan', function ($routes) {
+    $routes->get('/', 'Pengajuan::index');
+    $routes->get('read', 'Pengajuan::read');
+    $routes->post('post', 'Pengajuan::post');
+    $routes->put('put', 'Pengajuan::put');
+    $routes->delete('deleted/(:any)', 'Pengajuan::delete/$1');
 });
 
 /*
