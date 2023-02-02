@@ -1,6 +1,13 @@
 angular.module('adminctrl', [])
     // Admin
     .controller('dashboardController', dashboardController)
+    .controller('subKlasifikasiController', subKlasifikasiController)
+
+
+
+
+
+
     .controller('wijkController', wijkController)
     .controller('kspController', kspController)
     .controller('detailKeluargaController', detailKeluargaController)
@@ -35,6 +42,98 @@ function dashboardController($scope, dashboardServices) {
     //     $scope.datas = res;
     // })
 }
+
+function subKlasifikasiController($scope, klasifikasiServices, pesan) {
+    $scope.$emit("SendUp", "Pembobotan Faktor");
+    $scope.datas = {};
+    $scope.model = {};
+    klasifikasiServices.get().then((res) => {
+        $scope.datas = res;
+    })
+
+    $scope.setInisial = (item) => {
+        $scope.model.inisial = item.substring(0, 3).toUpperCase();
+    }
+
+    $scope.save = () => {
+        pesan.dialog('Yakin ingin?', 'Yes', 'Tidak').then(res => {
+            if ($scope.model.id) {
+                klasifikasiServices.put($scope.model).then(res => {
+                    $scope.model = {};
+                    pesan.Success("Berhasil mengubah data");
+                })
+            } else {
+                klasifikasiServices.post($scope.model).then(res => {
+                    $scope.model = {};
+                    pesan.Success("Berhasil menambah data");
+                })
+            }
+        })
+    }
+
+    $scope.edit = (item) => {
+        $scope.model = angular.copy(item);
+    }
+
+    $scope.delete = (param) => {
+        pesan.dialog('Yakin ingin?', 'Ya', 'Tidak').then(res => {
+            klasifikasiServices.deleted(param).then(res => {
+                pesan.Success("Berhasil menghapus data");
+            })
+        });
+    }
+}
+
+function klasifikasiController($scope, subKlasifikasiServices, pesan) {
+    $scope.$emit("SendUp", "Pembobotan Faktor");
+    $scope.datas = {};
+    $scope.model = {};
+    subKlasifikasiServices.get().then((res) => {
+        $scope.datas = res;
+    })
+
+    $scope.setInisial = (item) => {
+        $scope.model.inisial = item.substring(0, 3).toUpperCase();
+    }
+
+    $scope.save = () => {
+        pesan.dialog('Yakin ingin?', 'Yes', 'Tidak').then(res => {
+            if ($scope.model.id) {
+                subKlasifikasiServices.put($scope.model).then(res => {
+                    $scope.model = {};
+                    pesan.Success("Berhasil mengubah data");
+                })
+            } else {
+                subKlasifikasiServices.post($scope.model).then(res => {
+                    $scope.model = {};
+                    pesan.Success("Berhasil menambah data");
+                })
+            }
+        })
+    }
+
+    $scope.edit = (item) => {
+        $scope.model = angular.copy(item);
+    }
+
+    $scope.delete = (param) => {
+        pesan.dialog('Yakin ingin?', 'Ya', 'Tidak').then(res => {
+            subKlasifikasiServices.deleted(param).then(res => {
+                pesan.Success("Berhasil menghapus data");
+            })
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 function wijkController($scope, wijkServices, pesan) {
     $scope.$emit("SendUp", "Pembobotan Faktor");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="apps">
 
 <head>
 
@@ -17,6 +17,8 @@
 
     <!-- Custom styles for this template-->
     <link href="<?= base_url() ?>/assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?= base_url() ?>/libs/angular-datatables/dist/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet" />
 
 </head>
 
@@ -55,7 +57,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Manajemen Data:</h6>
                         <a class="collapse-item" href="<?= base_url('admin/klasifikasi')?>">Klasifikasi</a>
-                        <a class="collapse-item" href="cards.html">Sub  Klasifikasi</a>
+                        <a class="collapse-item" href="<?= base_url('admin/sub_klasifikasi')?>">Sub  Klasifikasi</a>
                         <a class="collapse-item" href="cards.html">Biaya</a>
                     </div>
                 </div>
@@ -245,6 +247,36 @@
 
     <!-- Bootstrap core JavaScript-->
     <script src="<?= base_url() ?>/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="<?= base_url() ?>/libs/angular/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.2/angular-sanitize.min.js" integrity="sha512-JkCv2gG5E746DSy2JQlYUJUcw9mT0vyre2KxE2ZuDjNfqG90Bi7GhcHUjLQ2VIAF1QVsY5JMwA1+bjjU5Omabw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.30/angular-ui-router.min.js" integrity="sha512-HdDqpFK+5KwK5gZTuViiNt6aw/dBc3d0pUArax73z0fYN8UXiSozGNTo3MFx4pwbBPldf5gaMUq/EqposBQyWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.2/angular-animate.min.js" integrity="sha512-jZoujmRqSbKvkVDG+hf84/X11/j5TVxwBrcQSKp1W+A/fMxmYzOAVw+YaOf3tWzG/SjEAbam7KqHMORlsdF/eA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="<?= base_url() ?>/js/apps.js"></script>
+    <script src="<?= base_url() ?>/js/services/helper.services.js"></script>
+    <script src="<?= base_url() ?>/js/services/auth.services.js"></script>
+    <script src="<?= base_url() ?>/js/services/admin.services.js"></script>
+    <script src="<?= base_url() ?>/js/services/pesan.services.js"></script>
+    <script src="<?= base_url() ?>/js/controllers/admin.controllers.js"></script>
+    <script src="<?= base_url() ?>/js/components/components.js"></script>
+    <!-- <script src="<?= base_url() ?>/libs/sweetalert2/dist/sweetalert2.all.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- <script src="<?= base_url() ?>/libs/select2/select22.min.js"></script> -->
+    <script src="<?= base_url() ?>/libs/angular-ui-select2/src/select2.js"></script>
+    <script src="<?= base_url() ?>/libs/angular-datatables/dist/angular-datatables.js"></script>
+    <script src="<?= base_url() ?>/libs/angular-locale_id-id.js"></script>
+    <script src="<?= base_url() ?>/libs/input-mask/angular-input-masks-standalone.min.js"></script>
+    <script src="<?= base_url() ?>/libs/jquery.PrintArea.js"></script>
+    <script src="<?= base_url() ?>/libs/angular-base64-upload/dist/angular-base64-upload.min.js"></script>
+    <script src="<?= base_url() ?>/libs/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="<?= base_url() ?>/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="<?= base_url() ?>/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="<?= base_url() ?>/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="<?= base_url() ?>/libs/datatables/btn.js"></script>
+    <script src="<?= base_url() ?>/libs/datatables/print.js"></script>
+    <script src="<?= base_url() ?>/libs/loading/dist/loadingoverlay.min.js"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+
+
     <script src="<?= base_url() ?>/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->

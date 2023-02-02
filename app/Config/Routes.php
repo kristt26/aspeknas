@@ -45,10 +45,17 @@ $routes->group('pembayaran', function($routes){
 $routes->group('admin', function($routes){
     $routes->group('klasifikasi', function($routes){
         $routes->get('/', 'Admin\Klasifikasi::index');
-        $routes->get('read', 'Admin\Klasifiksi::read');
+        $routes->get('read', 'Admin\Klasifikasi::read');
         $routes->post('post', 'Admin\Klasifikasi::post');
         $routes->put('put', 'Admin\Klasifikasi::put');
         $routes->delete('delete/(:any)', 'Admin\Klasifikasi::delete/$1');
+    });
+    $routes->group('sub_klasifikasi', function($routes){
+        $routes->get('/', 'Admin\SubKlasifikasi::index');
+        $routes->get('read', 'Admin\SubKlasifikasi::read');
+        $routes->post('post', 'Admin\SubKlasifikasi::post');
+        $routes->put('put', 'Admin\SubKlasifikasi::put');
+        $routes->delete('delete/(:any)', 'Admin\SubKlasifikasi::delete/$1');
     });
 });
 

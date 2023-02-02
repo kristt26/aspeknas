@@ -1,8 +1,8 @@
 <?= $this->extend('layout/layout') ?>
 <?= $this->section('content') ?>
-<div ng-controller="klasifikasiController">
+<div ng-controller="subKlasifikasiController">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Klasifikasi</h1>
+        <h1 class="h3 mb-0 text-gray-800">Sub Klasifikasi</h1>
 
     </div>
     <div class="row">
