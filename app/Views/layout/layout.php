@@ -19,6 +19,9 @@
     <link href="<?= base_url() ?>/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="<?= base_url() ?>/libs/angular-datatables/dist/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url() ?>/assets/css/style.css">
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-k7JEuIu6AAAEp8X8"></script>
 
 </head>
 
@@ -49,33 +52,24 @@
             </li>
             <?php if (session()->get('role') == 'Admin') : ?>
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                    <a class="nav-link" href="<?= base_url('admin/klasifikasi') ?>">
                         <i class="fas fa-server"></i>
-                        <span>Manajemen Data</span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Manajemen Data:</h6>
-                            <a class="collapse-item" href="<?= base_url('admin/klasifikasi') ?>">Klasifikasi</a>
-                            <a class="collapse-item" href="<?= base_url('admin/sub_klasifikasi') ?>">Sub Klasifikasi</a>
-                            <a class="collapse-item" href="cards.html">Biaya</a>
-                        </div>
-                    </div>
+                        <span>Klasifikasi</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('user') ?>">
+                    <a class="nav-link" href="<?= base_url('admin/manajemen_user') ?>">
                         <i class="fas fa-users"></i>
                         <span>Manajemen User</span></a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('kategori') ?>">
                         <i class="fas fa-file"></i>
                         <span>Kategori</span></a>
-                </li>
+                </li> -->
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('pengajuan') ?>">
-                        <i class="fas fa-database"></i>
-                        <span>Pengajuan Berkas</span></a>
+                    <a class="nav-link" href="<?= base_url('admin/pengajuan') ?>">
+                        <i class="fas fa-file-archive"></i>
+                        <span>List Pengajuan</span></a>
                 </li>
             <?php endif ?>
 
@@ -86,6 +80,11 @@
                         <span>Pendaftaran</span></a>
                 </li>
             <?php endif ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('logout') ?>">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span></a>
+            </li>
 
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -117,60 +116,12 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="javascript:void()" id="userDropdown" role="button">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= session()->get('nama') ?></span>
                                 <!-- <img class="img-profile rounded-circle"
                                     src="<?= base_url() ?>/assets/img/undraw_profile.svg"> -->
                             </a>
@@ -255,7 +206,7 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="<?= base_url() ?>/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="<?= base_url() ?>/libs/jquery/dist/jquery.min.js"></script>
     <script src="<?= base_url() ?>/libs/angular/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.2/angular-sanitize.min.js" integrity="sha512-JkCv2gG5E746DSy2JQlYUJUcw9mT0vyre2KxE2ZuDjNfqG90Bi7GhcHUjLQ2VIAF1QVsY5JMwA1+bjjU5Omabw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.30/angular-ui-router.min.js" integrity="sha512-HdDqpFK+5KwK5gZTuViiNt6aw/dBc3d0pUArax73z0fYN8UXiSozGNTo3MFx4pwbBPldf5gaMUq/EqposBQyWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -269,7 +220,7 @@
     <script src="<?= base_url() ?>/js/components/components.js"></script>
     <!-- <script src="<?= base_url() ?>/libs/sweetalert2/dist/sweetalert2.all.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!-- <script src="<?= base_url() ?>/libs/select2/select22.min.js"></script> -->
+    <!-- <script src="<?= base_url() ?>/libs/select2/select2.min.js"></script> -->
     <script src="<?= base_url() ?>/libs/angular-ui-select2/src/select2.js"></script>
     <script src="<?= base_url() ?>/libs/angular-datatables/dist/angular-datatables.js"></script>
     <script src="<?= base_url() ?>/libs/angular-locale_id-id.js"></script>
@@ -293,6 +244,11 @@
 
     <!-- Custom scripts for all pages-->
     <script src="<?= base_url() ?>/assets/js/sb-admin-2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
 
 </body>
 

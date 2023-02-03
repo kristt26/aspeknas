@@ -1,18 +1,24 @@
 <?php
 
 namespace App\Controllers;
+
+use CodeIgniter\API\ResponseTrait;
 use Midtrans\Snap;
 
 class Pembayaran extends BaseController
 {
+	use ResponseTrait;
     protected $midtrans;
+    protected $pembayaran;
     public function __construct() {
         $this->midtrans = new Snap();
+        $this->pembayaran = new \App\Models\PembayaranModel();
         \Midtrans\Config::$serverKey = "SB-Mid-server-0yZKfLleO5WlljNFyBhCC_ql";
         \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
     }
+	
     public function index()
     {
         return view('welcome_message');
@@ -20,62 +26,32 @@ class Pembayaran extends BaseController
 
     public function token()
     {
+		$dataItem = $this->request->getJSON();
 		
 		// Required
 		$transaction_details = array(
-		  'order_id' => rand(),
-		  'gross_amount' => 94000, // no decimal allowed for creditcard
+		  'order_id' => $dataItem->order_id,
+		  'gross_amount' => $dataItem->subTotal, // no decimal allowed for creditcard
 		);
 
+		$item_details = [];
 		// Optional
-		$item1_details = array(
-		  'id' => 'a1',
-		  'price' => 18000,
-		  'quantity' => 3,
-		  'name' => "Apple"
-		);
-
-		// Optional
-		$item2_details = array(
-		  'id' => 'a2',
-		  'price' => 20000,
-		  'quantity' => 2,
-		  'name' => "Orange"
-		);
-
-		// Optional
-		$item_details = array ($item1_details, $item2_details);
-
-		// Optional
-		$billing_address = array(
-		  'first_name'    => "Andri",
-		  'last_name'     => "Litani",
-		  'address'       => "Mangga 20",
-		  'city'          => "Jakarta",
-		  'postal_code'   => "16602",
-		  'phone'         => "081122334455",
-		  'country_code'  => 'IDN'
-		);
-
-		// Optional
-		$shipping_address = array(
-		  'first_name'    => "Obet",
-		  'last_name'     => "Supriadi",
-		  'address'       => "Manggis 90",
-		  'city'          => "Jakarta",
-		  'postal_code'   => "16601",
-		  'phone'         => "08113366345",
-		  'country_code'  => 'IDN'
-		);
+		foreach ($dataItem->biaya as $key => $value) {
+			$item = [
+				'id'=>'b'.$key+1,
+				'price'=>$value->nominal,
+				'quantity' => $value->qty,
+		  		'name' => $value->desc
+			];
+			array_push($item_details, $item);
+		}
 
 		// Optional
 		$customer_details = array(
-		  'first_name'    => "Andri",
-		  'last_name'     => "Litani",
-		  'email'         => "andri@litani.com",
-		  'phone'         => "081122334455",
-		  'billing_address'  => $billing_address,
-		  'shipping_address' => $shipping_address
+		  'first_name'    => session()->get('nama')." | ".session()->get('direktur'),
+		  'last_name'     => "",
+		  'email'         => session()->get('email'),
+		  'phone'         => session()->get('kontak')
 		);
 
 		// Data yang akan dikirim untuk request redirect_url.
@@ -87,7 +63,7 @@ class Pembayaran extends BaseController
         $custom_expiry = array(
             'start_time' => date("Y-m-d H:i:s O",$time),
             'unit' => 'minute', 
-            'duration'  => 2
+            'duration'  => 30
         );
         
         $transaction_data = array(
@@ -104,18 +80,22 @@ class Pembayaran extends BaseController
             )
         );
 
-		error_log(json_encode($transaction_data));
-		$snapToken =  $this->midtrans->getSnapToken($params);
-		error_log($snapToken);
-		echo $snapToken;
+		try {
+			$snapToken =  $this->midtrans->getSnapToken($transaction_data);
+			// echo $snapToken;
+			return $this->respond(["data"=>$snapToken]);
+			//code...
+		} catch (\Throwable $th) {
+			return $this->fail($th->getMessage());
+			// echo $th->getMessage();
+		}
     }
 
-    public function finish()
+    public function post()
     {
-    	$result = json_decode($this->request->getVar('result_data'));
-    	echo 'RESULT <br><pre>';
-    	var_dump($result);
-    	echo '</pre>' ;
-
+        $dataItem = $this->request->getJSON();
+        $dataItem->detail = serialize($dataItem->result);
+        $this->pembayaran->insert($dataItem);
+        return $this->respondCreated(true);
     }
 }

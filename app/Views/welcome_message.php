@@ -9,7 +9,7 @@
 <body>
 
 
-    <form id="payment-form" method="post" action="<?= base_url() ?>/finish">
+    <form id="payment-form" method="post" action="<?= base_url() ?>/pembayaran/finish">
         <input type="hidden" name="result_type" id="result-type" value=""></div>
         <input type="hidden" name="result_data" id="result-data" value=""></div>
     </form>
@@ -21,7 +21,7 @@
             $(this).attr("disabled", "disabled");
 
             $.ajax({
-                url: '<?= base_url() ?>/token',
+                url: '<?= base_url() ?>/pembayaran/token',
                 cache: false,
 
                 success: function(data) {
@@ -32,30 +32,30 @@
                     var resultType = document.getElementById('result-type');
                     var resultData = document.getElementById('result-data');
 
-                    function changeResult(type, data) {
-                        $("#result-type").val(type);
-                        $("#result-data").val(JSON.stringify(data));
-                        //resultType.innerHTML = type;
-                        //resultData.innerHTML = JSON.stringify(data);
-                    }
+                    // function changeResult(type, data) {
+                    //     $("#result-type").val(type);
+                    //     $("#result-data").val(JSON.stringify(data));
+                    //     //resultType.innerHTML = type;
+                    //     //resultData.innerHTML = JSON.stringify(data);
+                    // }
 
                     snap.pay(data, {
 
                         onSuccess: function(result) {
-                            changeResult('success', result);
+                            // changeResult('success', result);
                             console.log(result.status_message);
                             console.log(result);
-                            $("#payment-form").submit();
+                            // $("#payment-form").submit();
                         },
                         onPending: function(result) {
-                            changeResult('pending', result);
+                            // changeResult('pending', result);
                             console.log(result.status_message);
-                            $("#payment-form").submit();
+                            // $("#payment-form").submit();
                         },
                         onError: function(result) {
-                            changeResult('error', result);
+                            // changeResult('error', result);
                             console.log(result.status_message);
-                            $("#payment-form").submit();
+                            // $("#payment-form").submit();
                         }
                     });
                 }

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>Aspeknas | Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="<?= base_url() ?>/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -100,12 +100,12 @@
                     }
                 }).then(
                     (res) => {
-                        pesan.dialog("Daftar Berhasil", 'OK', false, "info").then(ress => {
-                            if (res.data.role == 'Admin')
-                                document.location.href = helperServices.url + "/admin";
-                            else
-                                document.location.href = helperServices.url + "/home";
-                        });
+                        if (res.data.role == 'Admin')
+                            document.location.href = helperServices.url + "home";
+                        else
+                            document.location.href = helperServices.url + "/home";
+                        // pesan.dialog("Daftar Berhasil", 'OK', false, "info").then(ress => {
+                        // });
                     },
                     (err) => {
                         pesan.error(err.data.message);

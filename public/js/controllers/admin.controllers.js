@@ -3,6 +3,9 @@ angular.module('adminctrl', [])
     .controller('dashboardController', dashboardController)
     .controller('klasifikasiController', klasifikasiController)
     .controller('subKlasifikasiController', subKlasifikasiController)
+    .controller('pengajuanController', pengajuanController)
+    .controller('validasiPengajuanController', validasiPengajuanController)
+    .controller('userManajemenController', userManajemenController)
 
 
 
@@ -86,7 +89,7 @@ function klasifikasiController($scope, klasifikasiServices, pesan, helperService
         });
     }
 
-    $scope.subKlasifikasi = (param)=>{
+    $scope.subKlasifikasi = (param) => {
         document.location.href = helperServices.url + "admin/sub_klasifikasi/data/" + param.id;
     }
 }
@@ -132,6 +135,271 @@ function subKlasifikasiController($scope, subKlasifikasiServices, pesan, helperS
             })
         });
     }
+}
+
+function pengajuanController($scope, pengajuanServices, pesan, helperServices, pembayaranServices) {
+    $scope.$emit("SendUp", "Pembobotan Faktor");
+    $scope.datas = {};
+    $scope.model = {};
+    $scope.layout = "Klasifikasi";
+    $scope.itemSub={};
+    $scope.tahapan = helperServices.tahapan;
+    if (helperServices.lastPath == "pengajuan") {
+        pengajuanServices.get().then(res => {
+            $scope.datas = res;
+            $scope.datas.pengajuan.forEach(element => {
+                element.klasifikasi = $scope.datas.klasifikasi.find(x=>x.id == element.klasifikasi_id);
+                element.subPengajuan.forEach(element1 => {
+                    element1.detail = element.klasifikasi.subKlasifikasi.find(x=>x.id==element1.sub_klasifikasi_id);
+                    
+                });
+            });
+            
+            console.log($scope.datas);
+        })
+    } else {
+        pengajuanServices.item().then(res => {
+            $scope.datas = res;
+            var item = window.localStorage.getItem('data')
+            if (item) {
+                $scope.$applyAsync(() => {
+                    $scope.model = JSON.parse(item);
+                    $scope.layout = $scope.model.layout;
+                })
+                console.log($scope.model);
+            }
+        })
+    }
+
+    $scope.setSubKlasifikasi = (param)=>{
+        $scope.itemSub = param;
+        console.log(param);
+    }
+
+    $scope.setItemPengajuan = (param)=>{
+        var cek = $scope.tahapan.find(x=>x.tahapan == param.status);
+        $scope.limit = cek.id-1;
+    }
+
+    $scope.next = (item) => {
+        $scope.layout = item;
+        $scope.model.subTotal = 0;
+        if (item == 'Detail Pembayaran') {
+            
+            $scope.model.biaya = [];
+            helperServices.biaya.forEach(element => {
+                var item = {};
+                if (element.desc == "SBU")
+                    item.qty = $scope.model.subKlasifikasi.length;
+                else
+                    item.qty = 1;
+                item.desc = element.desc;
+                item.nominal = element.nominal;
+                item.subTotal = item.qty * item.nominal;
+                $scope.model.biaya.push(item);
+                $scope.model.subTotal += item.subTotal;
+            });
+            $scope.model.layout = "Detail Pembayaran";
+            window.localStorage.setItem('data', JSON.stringify($scope.model));
+        }
+    }
+
+    $scope.save = () => {
+        pesan.dialog('Yakin ingin?', 'Yes', 'Tidak').then(res => {
+            if ($scope.model.id) {
+                pengajuanServices.put($scope.model).then(res => {
+                    $scope.model = {};
+                    pesan.Success("Berhasil mengubah data");
+                })
+            } else {
+                $scope.model.order_id = Math.floor(Math.random() * 900000000 + 100000000);
+                pengajuanServices.post($scope.model).then(res => {
+                    pembayaranServices.get(res).then(ress => {
+                        console.log('token = ' + ress);
+                        snap.pay(ress, {
+
+                            onSuccess: function (result) {
+                                // changeResult('success', result);
+                                var item = {};
+                                item.order_id=res.order_id;
+                                item.pengajuan_id=res.id;
+                                item.nominal=res.subTotal;
+                                item.status=result.transaction_status;
+                                item.tanggal_transaksi=result.transaction_time;
+                                item.result=result;
+                                pembayaranServices.post(item).then(a=>{
+                                    $scope.model = {};
+                                    window.localStorage.removeItem('data');
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                        window.location.href = helperServices.url + "pengajuan";
+                                    })
+                                })
+                            },
+                            onPending: function (result) {
+                                var item = {};
+                                item.order_id=res.order_id;
+                                item.pengajuan_id=res.id;
+                                item.nominal=res.subTotal;
+                                item.status=result.transaction_status;
+                                item.tanggal_transaksi=result.transaction_time;
+                                item.result=result;
+                                pembayaranServices.post(item).then(a=>{
+                                    $scope.model = {};
+                                    window.localStorage.removeItem('data');
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                        window.location.href = helperServices.url + "pengajuan";
+                                    })
+                                })
+                            }
+                        });
+                    })
+                    
+                })
+            }
+        })
+    }
+
+    $scope.edit = (item) => {
+        $scope.model = angular.copy(item);
+    }
+
+    $scope.delete = (param) => {
+        pesan.dialog('Yakin ingin?', 'Ya', 'Tidak').then(res => {
+            subKlasifikasiServices.deleted(param).then(res => {
+                pesan.Success("Berhasil menghapus data");
+            })
+        });
+    }
+}
+function validasiPengajuanController($scope, validasiPengajuanServices, pesan, helperServices, pembayaranServices) {
+    $scope.$emit("SendUp", "Pembobotan Faktor");
+    $scope.datas = {};
+    $scope.model = {};
+    $scope.layout = "Klasifikasi";
+    $scope.itemSub={};
+    $scope.tahapan = helperServices.tahapan;
+    validasiPengajuanServices.get().then(res => {
+        $scope.datas = res;
+        $scope.datas.pengajuan.forEach(element => {
+            element.klasifikasi = $scope.datas.klasifikasi.find(x=>x.id == element.klasifikasi_id);
+            element.subPengajuan.forEach(element1 => {
+                element1.detail = element.klasifikasi.subKlasifikasi.find(x=>x.id==element1.sub_klasifikasi_id);
+            });
+        });
+        
+        console.log($scope.datas);
+    })
+
+    $scope.setSubKlasifikasi = (param)=>{
+        $scope.itemSub = param;
+        console.log(param);
+    }
+
+    $scope.setItemPengajuan = (param)=>{
+        var cek = $scope.tahapan.find(x=>x.tahapan == param.status);
+        $scope.limit = cek.id-1;
+        $scope.model = param;
+    }
+
+    $scope.next = (item) => {
+        $scope.layout = item;
+        $scope.model.subTotal = 0;
+        if (item == 'Detail Pembayaran') {
+            
+            $scope.model.biaya = [];
+            helperServices.biaya.forEach(element => {
+                var item = {};
+                if (element.desc == "SBU")
+                    item.qty = $scope.model.subKlasifikasi.length;
+                else
+                    item.qty = 1;
+                item.desc = element.desc;
+                item.nominal = element.nominal;
+                item.subTotal = item.qty * item.nominal;
+                $scope.model.biaya.push(item);
+                $scope.model.subTotal += item.subTotal;
+            });
+            $scope.model.layout = "Detail Pembayaran";
+            window.localStorage.setItem('data', JSON.stringify($scope.model));
+        }
+    }
+
+    $scope.save = () => {
+        pesan.dialog('Yakin ingin?', 'Yes', 'Tidak').then(res => {
+            if ($scope.model.id) {
+                validasiPengajuanServices.put($scope.model).then(res => {
+                    $scope.model = {};
+                    pesan.Success("Berhasil mengubah data");
+                    $("#update").modal('hide');
+                })
+            } else {
+                $scope.model.order_id = Math.floor(Math.random() * 900000000 + 100000000);
+                pengajuanServices.post($scope.model).then(res => {
+                    pembayaranServices.get(res).then(ress => {
+                        console.log('token = ' + ress);
+                        snap.pay(ress, {
+
+                            onSuccess: function (result) {
+                                // changeResult('success', result);
+                                var item = {};
+                                item.order_id=res.order_id;
+                                item.pengajuan_id=res.id;
+                                item.nominal=res.subTotal;
+                                item.status=result.transaction_status;
+                                item.tanggal_transaksi=result.transaction_time;
+                                item.result=result;
+                                pembayaranServices.post(item).then(a=>{
+                                    $scope.model = {};
+                                    window.localStorage.removeItem('data');
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                        window.location.href = helperServices.url + "pengajuan";
+                                    })
+                                })
+                            },
+                            onPending: function (result) {
+                                var item = {};
+                                item.order_id=res.order_id;
+                                item.pengajuan_id=res.id;
+                                item.nominal=res.subTotal;
+                                item.status=result.transaction_status;
+                                item.tanggal_transaksi=result.transaction_time;
+                                item.result=result;
+                                pembayaranServices.post(item).then(a=>{
+                                    $scope.model = {};
+                                    window.localStorage.removeItem('data');
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                        window.location.href = helperServices.url + "pengajuan";
+                                    })
+                                })
+                            }
+                        });
+                    })
+                    
+                })
+            }
+        })
+    }
+
+    $scope.edit = (item) => {
+        $scope.model = angular.copy(item);
+    }
+
+    $scope.delete = (param) => {
+        pesan.dialog('Yakin ingin?', 'Ya', 'Tidak').then(res => {
+            subKlasifikasiServices.deleted(param).then(res => {
+                pesan.Success("Berhasil menghapus data");
+            })
+        });
+    }
+}
+
+function userManajemenController($scope, userManajemenServices, pesan, helperServices) {
+    $scope.$emit("SendUp", "Pembobotan Faktor");
+    $scope.datas = {};
+    $scope.model = {};
+    userManajemenServices.get().then(res => {
+        $scope.datas = res;
+    })
 }
 
 
@@ -1466,23 +1734,23 @@ function pindahJemaatController($scope, pindahJemaatServices, gerejaServices, an
     $scope.clear = () => {
         document.querySelector("#form").classList.add('set-hide-page');
         document.querySelector("#statusMutasi").classList.add('set-hide-page');
-        
+
     }
     // $scope.age = (item)=>{
     //     var tglMeninggal = new Date(item)
     // }
 
-    $scope.hitungUmur = (item)=>{
-        if(!$scope.model.tanggal_meninggal){
+    $scope.hitungUmur = (item) => {
+        if (!$scope.model.tanggal_meninggal) {
             var today = new Date();
-            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
             var time = today.getHours() + ":" + today.getMinutes();
-            var dateTime = date+' '+time;
+            var dateTime = date + ' ' + time;
             $scope.model.tanggal_meninggal = new Date(dateTime);
         }
         var tanggal_lahir = new Date(item);
-        var month_diff =  $scope.model.tanggal_meninggal - tanggal_lahir;
-        var age_dt = new Date(month_diff); 
+        var month_diff = $scope.model.tanggal_meninggal - tanggal_lahir;
+        var age_dt = new Date(month_diff);
         var year = age_dt.getUTCFullYear();
         $scope.model.umur = Math.abs(year - 1970);
     }
@@ -1584,24 +1852,24 @@ function pindahJemaatController($scope, pindahJemaatServices, gerejaServices, an
         })
     })
 
-    $scope.saveGereja = (param)=>{
-        pesan.dialog("Ingin menambah data ?", "Ya", "Tidak", 'warning').then(x=>{
-            gerejaServices.post(param).then(res=>{
+    $scope.saveGereja = (param) => {
+        pesan.dialog("Ingin menambah data ?", "Ya", "Tidak", 'warning').then(x => {
+            gerejaServices.post(param).then(res => {
                 pesan.Success("Berasil menambah data");
                 $("#addGereja").modal('hide');
             })
         })
     }
 
-    $scope.save = (param)=>{
-        pesan.dialog("Anda yakin !", "Ya", "Tidak", 'warning').then(x=>{
+    $scope.save = (param) => {
+        pesan.dialog("Anda yakin !", "Ya", "Tidak", 'warning').then(x => {
             var item = angular.copy(param);
-            item.status_pindah && item.status_pindah == "2" ? item.tanggal_meninggal = helperServices.dateTimeToString(param.tanggal_meninggal):item.tanggal_pindah = helperServices.dateToString(param.tanggal_pindah);
-            item.status_pindah = item.jenisAnggota=='2' ? '1' : item.status_pindah;
-            pindahJemaatServices.post(item).then(res=>{
+            item.status_pindah && item.status_pindah == "2" ? item.tanggal_meninggal = helperServices.dateTimeToString(param.tanggal_meninggal) : item.tanggal_pindah = helperServices.dateToString(param.tanggal_pindah);
+            item.status_pindah = item.jenisAnggota == '2' ? '1' : item.status_pindah;
+            pindahJemaatServices.post(item).then(res => {
                 pesan.Success("Berasil menambah data");
                 setTimeout(() => {
-                    if(item.status_pindah == "1")document.location.href = helperServices.url + "mutasi?item=" + helperServices.enkrip('pindah');
+                    if (item.status_pindah == "1") document.location.href = helperServices.url + "mutasi?item=" + helperServices.enkrip('pindah');
                     else document.location.href = helperServices.url + "mutasi?item=" + helperServices.enkrip('meninggal');
                 }, 1000);
             })

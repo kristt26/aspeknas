@@ -39,6 +39,8 @@ function helperServices($location) {
     service.encript = (item) => {
         return btoa(item + '*pendataanJemaat');
     }
+    service.biaya = [{desc: "VVA",nominal:300000}, {desc: "SBU",nominal:500000}, {desc: "IT",nominal:300000}, {desc: "PJK",nominal:300000},{desc: "Form",nominal:300000},{desc: "Meterai",nominal:100000}];
+    service.tahapan = [{id: 1,tahapan: "Pembayaran"}, {id: 2,tahapan: "Validasi Berkas"}, {id: 3,tahapan:"Sertifikat SBU"}, {id: 4,tahapan:"Sertifikat KTA",}, {id: 5,tahapan:"Selesai"}];
     service.decript = (item) => {
         var string = atob(item);
         var pecah = string.split('*');

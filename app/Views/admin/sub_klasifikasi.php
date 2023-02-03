@@ -103,9 +103,9 @@
 
                                         <td rowspan="3">{{item.tingkat_resiko}}</td>
                                         <td rowspan="3" class="d-flex justify-content-around">
-                                            <button class="btn btn-warning btn-sm" ng-click="edit(item)"><i class="fas fa-edit"></i>
-                                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
-                                                </button>
+                                            <button class="btn btn-warning btn-sm" ng-click="edit(item)"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                     <tr>

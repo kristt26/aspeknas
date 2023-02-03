@@ -33,19 +33,20 @@ $routes->get('/', 'Auth::index');
 $routes->get('register', 'Auth::register');
 $routes->post('daftar', 'Auth::daftar');
 $routes->post('login', 'Auth::login');
+$routes->get('logout', 'Auth::logout');
 
 $routes->group('home', function ($routes) {
     $routes->get('/', 'Admin\Home::index');
     $routes->get('token', 'Admin\Home::token');
     $routes->post('finish', 'Admin\Home::finish');
 });
-$routes->group('pembayaran', function ($routes) {
+$routes->group('pembayaran', ['filter' => 'pend'], function ($routes) {
     $routes->get('/', 'Pembayaran::index');
-    $routes->get('token', 'Pembayaran::token');
-    $routes->post('finish', 'Pembayaran::finish');
+    $routes->post('token', 'Pembayaran::token');
+    $routes->post('post', 'Pembayaran::post');
 });
 
-$routes->group('admin', function ($routes) {
+$routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->group('klasifikasi', function ($routes) {
         $routes->get('/', 'Admin\Klasifikasi::index');
         $routes->get('read', 'Admin\Klasifikasi::read');
@@ -60,12 +61,28 @@ $routes->group('admin', function ($routes) {
         $routes->put('put', 'Admin\SubKlasifikasi::put');
         $routes->delete('delete/(:any)', 'Admin\SubKlasifikasi::delete/$1');
     });
+    $routes->group('pengajuan', function ($routes) {
+        $routes->get('/', 'Admin\Pengajuan::index');
+        $routes->get('read', 'Admin\Pengajuan::read');
+        $routes->post('post', 'Admin\Pengajuan::post');
+        $routes->put('put', 'Admin\Pengajuan::put');
+        $routes->delete('delete/(:any)', 'Admin\Pengajuan::delete/$1');
+    });
+    $routes->group('manajemen_user', function ($routes) {
+        $routes->get('/', 'Admin\User::index');
+        $routes->get('read', 'Admin\User::read');
+        $routes->post('post', 'Admin\User::post');
+        $routes->put('put', 'Admin\User::put');
+        $routes->delete('delete/(:any)', 'Admin\User::delete/$1');
+    });
 });
 
 
-$routes->group('pengajuan', function ($routes) {
+$routes->group('pengajuan', ['filter' => 'pend'], function ($routes) {
     $routes->get('/', 'Pengajuan::index');
+    $routes->get('add', 'Pengajuan::tambah');
     $routes->get('read', 'Pengajuan::read');
+    $routes->get('get', 'Pengajuan::get');
     $routes->post('post', 'Pengajuan::post');
     $routes->put('put', 'Pengajuan::put');
     $routes->delete('deleted/(:any)', 'Pengajuan::delete/$1');

@@ -20,6 +20,12 @@ class Auth extends BaseController
     }
     public function index()
     {
+        if($this->user->countAllResults()==0){
+            $this->user->insert(['username'=>'Administrator', 'password'=>password_hash('Administrator#1', PASSWORD_DEFAULT), 'role'=>'Admin']);
+        }
+        if(session()->get('isLogin')){
+            return redirect()->to(base_url('home'));
+        }
         return view('auth');
     }
 
@@ -54,11 +60,11 @@ class Auth extends BaseController
             if (password_verify($data->password, $user['password'])) {
                 if ($user['role'] == "Admin") {
                     $dataSession = [
-                        'uid' => $user->id,
+                        'uid' => $user['id'],
                         'nama' => 'Administrator',
                         'username' => $user['username'],
                         'role' => $user['role'],
-                        'isRole' => true
+                        'isLogin' => true
                     ];
                     session()->set($dataSession);
                     return $this->respond($dataSession);
@@ -73,7 +79,7 @@ class Auth extends BaseController
                         'email' => $perusahaan['email'],
                         'username' => $user['username'],
                         'role' => $user['role'],
-                        'isRole' => true
+                        'isLogin' => true
                     ];
                     session()->set($dataSession);
                     return $this->respond($dataSession);
@@ -84,5 +90,11 @@ class Auth extends BaseController
         } else {
             return $this->failNotFound("User tidak ditemukan");
         }
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to(base_url());
     }
 }
