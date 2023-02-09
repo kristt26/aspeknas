@@ -68,21 +68,21 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Akta Perusahaan</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="akta" maxsize="200" ng-model="model.persyaratan.akta" base-sixty-four-input required>
+                                        <input type="file" class="form-control" accept="application/pdf" name="akta" maxsize="200" ng-model="model.persyaratan.akta" base-sixty-four-input required>
                                         <span ng-show="formData.akta.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">NPWP Perusahaan</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="npwp_perusahaan" maxsize="200" required ng-model="model.persyaratan.npwp_perusahaan" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="npwp_perusahaan" maxsize="200" required ng-model="model.persyaratan.npwp_perusahaan" base-sixty-four-input>
                                         <span ng-show="formData.npwp_perusahaan.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Nomor Induk</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="nomor_induk" required maxsize="200" ng-model="model.persyaratan.nomor_induk" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="nomor_induk" required maxsize="200" ng-model="model.persyaratan.nomor_induk" base-sixty-four-input>
                                         <span ng-show="formData.nomor_induk.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
@@ -95,28 +95,28 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">KTP Pengurus</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="ktp_pengurus" required maxsize="200" ng-model="model.persyaratan.ktp_pengurus" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="ktp_pengurus" required maxsize="200" ng-model="model.persyaratan.ktp_pengurus" base-sixty-four-input>
                                         <span ng-show="formData.ktp_pengurus.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">NPWP Pengurus</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="npwp_pengurus" required maxsize="200" ng-model="model.persyaratan.npwp_pengurus" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="npwp_pengurus" required maxsize="200" ng-model="model.persyaratan.npwp_pengurus" base-sixty-four-input>
                                         <span ng-show="formData.npwp_pengurus.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Foto</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="foto" required maxsize="200" ng-model="model.persyaratan.foto" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="foto" required maxsize="200" ng-model="model.persyaratan.foto" base-sixty-four-input>
                                         <span ng-show="formData.foto.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">SKK</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="skk" required maxsize="200" ng-model="model.persyaratan.skk" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="skk" required maxsize="200" ng-model="model.persyaratan.skk" base-sixty-four-input>
                                         <span ng-show="formData.skk.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
@@ -129,21 +129,21 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">KTP Tenaga Kerja</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="ktp_tenaga_kerja" required maxsize="200" ng-model="model.persyaratan.ktp_tenaga_kerja" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="ktp_tenaga_kerja" required maxsize="200" ng-model="model.persyaratan.ktp_tenaga_kerja" base-sixty-four-input>
                                         <span ng-show="formData.ktp_tenaga_kerja.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">NPWP Tenaga Kerja</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="npwp_tenaga_kerja" required maxsize="200" ng-model="model.persyaratan.npwp_tenaga_kerja" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="npwp_tenaga_kerja" required maxsize="200" ng-model="model.persyaratan.npwp_tenaga_kerja" base-sixty-four-input>
                                         <span ng-show="formData.npwp_tenaga_kerja.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Ijazah</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="ijazah_tenaga_kerja" required maxsize="200" ng-model="model.persyaratan.ijazah_tenaga_kerja" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="ijazah_tenaga_kerja" required maxsize="200" ng-model="model.persyaratan.ijazah_tenaga_kerja" base-sixty-four-input>
                                         <span ng-show="formData.ijazah_tenaga_kerja.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Akuntan</label>
-                                        <input type="file" class="form-control" accept="image/*, application/pdf" name="akuntan" required maxsize="200" ng-model="model.persyaratan.akuntan" base-sixty-four-input>
+                                        <input type="file" class="form-control" accept="application/pdf" name="akuntan" required maxsize="200" ng-model="model.persyaratan.akuntan" base-sixty-four-input>
                                         <span ng-show="formData.akuntant.$error.maxsize" style="color: red;">Files must not exceed 200 KB</span>
                                     </div>
                                 </div>
@@ -174,7 +174,7 @@
                                     <div class="col-12">
                                         <h6>
                                             <i class="fas fa-globe"></i> Aspeknas
-                                            <small class="float-right"><?= date('d M Y')?></small>
+                                            <small class="float-right"><?= date('d M Y') ?></small>
                                         </h6>
                                     </div>
                                     <!-- /.col -->
@@ -191,13 +191,13 @@
                                     <div class="col-sm-4 invoice-col">
                                         To
                                         <address style="font-size: smaller;">
-                                            <strong><?= session()->get('nama')?></strong><br>
-                                            Phone: <?= session()->get('kontak')?><br>
-                                            Email: <?= session()->get('email')?>
+                                            <strong><?= session()->get('nama') ?></strong><br>
+                                            Phone: <?= session()->get('kontak') ?><br>
+                                            Email: <?= session()->get('email') ?>
                                         </address>
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-sm-4 invoice-col"  style="font-size: smaller;">
+                                    <div class="col-sm-4 invoice-col" style="font-size: smaller;">
                                         <b>Invoice #007612</b><br>
                                         <br>
                                         <b>Order ID:</b> 4F3S8J<br>
@@ -236,11 +236,11 @@
                                     <!-- accepted payments column -->
                                     <div class="col-6">
                                         <p class="lead">Payment Methods:</p>
-                                        <img src="<?= base_url()?>/assets/img/credit/visa.png" alt="Visa">
-                                        <img src="<?= base_url()?>/assets/img/credit/mastercard.png" alt="Mastercard">
-                                        <img src="<?= base_url()?>/assets/img/credit/american-express.png" alt="American Express">
-                                        <img src="<?= base_url()?>/assets/img/credit/paypal2.png" alt="Paypal">
-                                        <img src="<?= base_url()?>/assets/img/credit/gopay.png" alt="Paypal">
+                                        <img src="<?= base_url() ?>/assets/img/credit/visa.png" alt="Visa">
+                                        <img src="<?= base_url() ?>/assets/img/credit/mastercard.png" alt="Mastercard">
+                                        <img src="<?= base_url() ?>/assets/img/credit/american-express.png" alt="American Express">
+                                        <img src="<?= base_url() ?>/assets/img/credit/paypal2.png" alt="Paypal">
+                                        <img src="<?= base_url() ?>/assets/img/credit/gopay.png" alt="Paypal">
 
                                     </div>
                                     <!-- /.col -->

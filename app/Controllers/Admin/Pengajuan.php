@@ -17,7 +17,8 @@ class Pengajuan extends BaseController
     protected $subKlasifikasi;
     protected $conn;
     protected $decode;
-    public function __construct() {
+    public function __construct()
+    {
         $this->pengajuan = new \App\Models\PengajuanModel();
         $this->sub_pengajuan = new \App\Models\SubPengajuanModel();
         $this->pembayaran = new \App\Models\PembayaranModel();
@@ -36,9 +37,9 @@ class Pengajuan extends BaseController
     public function read()
     {
         $pengajuan = $this->pengajuan->asObject()->select('pengajuan.*, perusahaan.perusahaan')
-        ->join('user', 'user.id=pengajuan.user_id', 'LEFT')
-        ->join('perusahaan', 'user.id=perusahaan.user_id', 'LEFT')
-        ->findAll();
+            ->join('user', 'user.id=pengajuan.user_id', 'LEFT')
+            ->join('perusahaan', 'user.id=perusahaan.user_id', 'LEFT')
+            ->findAll();
         foreach ($pengajuan as $key => $value) {
             $value->subPengajuan = $this->sub_pengajuan->where('pengajuan_id', $value->id)->findAll();
             $value->pembayaran = $this->pembayaran->where('pengajuan_id', $value->id)->first();
@@ -55,7 +56,7 @@ class Pengajuan extends BaseController
         ];
         return $this->respond($data);
     }
-    
+
     public function readById($id = null)
     {
         $klasifikasi = $this->klasifikasi->first($id);
@@ -66,12 +67,11 @@ class Pengajuan extends BaseController
     {
         $data = $this->request->getJSON();
         try {
-            if($this->klasifikasi->insert($data)){
+            if ($this->klasifikasi->insert($data)) {
                 $data->id = $this->klasifikasi->getInsertID();
                 return $this->respondCreated($data);
             }
             throw new \Exception("Data gagal menyimpan", 1);
-            
         } catch (\Throwable $th) {
             return $this->fail($th->getMessage());
         }
@@ -80,11 +80,10 @@ class Pengajuan extends BaseController
     {
         $data = $this->request->getJSON();
         try {
-            if($this->pengajuan->update($data->id, ['status'=>$data->status])){
+            if ($this->pengajuan->update($data->id, ['status' => $data->status])) {
                 return $this->respondUpdated(true);
             }
             throw new \Exception("Data gagal mengubah", 1);
-            
         } catch (\Throwable $th) {
             return $this->fail($th->getMessage());
         }
@@ -92,12 +91,23 @@ class Pengajuan extends BaseController
     public function deleted($id = null)
     {
         try {
-            if($this->klasifikasi->delete($id)){
+            if ($this->klasifikasi->delete($id)) {
                 return $this->respondDeleted(true);
             }
             throw new \Exception("Data gagal menghapus", 1);
         } catch (\Throwable $th) {
             return $this->fail($th->getMessage());
         }
+    }
+
+    public function berkas($id = null)
+    {
+        return view('admin/berkas');
+    }
+
+    public function data_berkas($id = null)
+    {
+        $data = $this->sbu->where('pengajuan_id', $id)->first();
+        return $this->respond($data);
     }
 }

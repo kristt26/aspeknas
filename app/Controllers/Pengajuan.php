@@ -50,9 +50,9 @@ class Pengajuan extends BaseController
     public function read()
     {
         $pengajuan = $this->pengajuan->asObject()->select('pengajuan.*, perusahaan.perusahaan')
-        ->join('user', 'user.id=pengajuan.user_id', 'LEFT')
-        ->join('perusahaan', 'user.id=perusahaan.user_id', 'LEFT')
-        ->where('user.id', session()->get('uid'))->findAll();
+            ->join('user', 'user.id=pengajuan.user_id', 'LEFT')
+            ->join('perusahaan', 'user.id=perusahaan.user_id', 'LEFT')
+            ->where('user.id', session()->get('uid'))->findAll();
         foreach ($pengajuan as $key => $value) {
             $value->subPengajuan = $this->sub_pengajuan->where('pengajuan_id', $value->id)->findAll();
             $value->pembayaran = $this->pembayaran->where('pengajuan_id', $value->id)->first();
@@ -93,28 +93,29 @@ class Pengajuan extends BaseController
         $data = $this->request->getJSON();
         try {
             $this->conn->transBegin();
-            $this->pengajuan->insert(['user_id'=>session()->get('uid'), 'klasifikasi_id'=>$data->klasifikasi_id]);
+            $this->pengajuan->insert(['user_id' => session()->get('uid'), 'klasifikasi_id' => $data->klasifikasi_id]);
             $data->id = $this->pengajuan->getInsertID();
             foreach ($data->subKlasifikasi as $key => $sub) {
-                $this->sub_pengajuan->insert(['pengajuan_id'=>$data->id, 'sub_klasifikasi_id'=>$sub->id]);
+                $this->sub_pengajuan->insert(['pengajuan_id' => $data->id, 'sub_klasifikasi_id' => $sub->id]);
                 $sub->id = $this->sub_pengajuan->getInsertID();
             }
             $item = [
-                'akte'=>$this->decode->decodebase64($data->persyaratan->akta->base64),
-                'akuntan'=>$this->decode->decodebase64($data->persyaratan->akuntan->base64),
-                'foto'=>$this->decode->decodebase64($data->persyaratan->foto->base64),
-                'ktp_pengurus'=>$this->decode->decodebase64($data->persyaratan->ktp_pengurus->base64),
-                'ktp_tenaga_kerja'=>$this->decode->decodebase64($data->persyaratan->ktp_tenaga_kerja->base64),
-                'nomor_induk'=>$this->decode->decodebase64($data->persyaratan->nomor_induk->base64),
-                'npwp_pengurus'=>$this->decode->decodebase64($data->persyaratan->npwp_pengurus->base64),
-                'npwp_perusahaan'=>$this->decode->decodebase64($data->persyaratan->npwp_perusahaan->base64),
-                'npwp_tenaga_kerja'=>$this->decode->decodebase64($data->persyaratan->npwp_tenaga_kerja->base64),
-                'skk'=>$this->decode->decodebase64($data->persyaratan->skk->base64),
-                'pengajuan_id'=>$data->id,
+                'akta' => $this->decode->decodebase64($data->persyaratan->akta->base64),
+                'akuntan' => $this->decode->decodebase64($data->persyaratan->akuntan->base64),
+                'foto' => $this->decode->decodebase64($data->persyaratan->foto->base64),
+                'ktp_pengurus' => $this->decode->decodebase64($data->persyaratan->ktp_pengurus->base64),
+                'ktp_tenaga_kerja' => $this->decode->decodebase64($data->persyaratan->ktp_tenaga_kerja->base64),
+                'nomor_induk' => $this->decode->decodebase64($data->persyaratan->nomor_induk->base64),
+                'npwp_pengurus' => $this->decode->decodebase64($data->persyaratan->npwp_pengurus->base64),
+                'npwp_perusahaan' => $this->decode->decodebase64($data->persyaratan->npwp_perusahaan->base64),
+                'npwp_tenaga_kerja' => $this->decode->decodebase64($data->persyaratan->npwp_tenaga_kerja->base64),
+                'ijazah_tenaga_kerja' => $this->decode->decodebase64($data->persyaratan->ijazah_tenaga_kerja->base64),
+                'skk' => $this->decode->decodebase64($data->persyaratan->skk->base64),
+                'pengajuan_id' => $data->id,
             ];
             $this->sbu->insert($item);
             $data->persyaratan->id = $this->sbu->getInsertID();
-            if($this->conn->transStatus()){
+            if ($this->conn->transStatus()) {
                 $this->conn->transCommit();
                 return $this->respond($data);
             }

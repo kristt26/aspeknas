@@ -244,6 +244,8 @@
 
     <!-- Custom scripts for all pages-->
     <script src="<?= base_url() ?>/assets/js/sb-admin-2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js">
+    </script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();

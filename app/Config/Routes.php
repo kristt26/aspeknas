@@ -67,6 +67,8 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('post', 'Admin\Pengajuan::post');
         $routes->put('put', 'Admin\Pengajuan::put');
         $routes->delete('delete/(:any)', 'Admin\Pengajuan::delete/$1');
+        $routes->get('berkas/(:any)', 'Admin\Pengajuan::berkas/$1');
+        $routes->get('data_berkas/(:any)', 'Admin\Pengajuan::data_berkas/$1');
     });
     $routes->group('manajemen_user', function ($routes) {
         $routes->get('/', 'Admin\User::index');
