@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\API\ResponseTrait;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use Midtrans\Snap;
 
 class Pengajuan extends BaseController
@@ -92,7 +93,7 @@ class Pengajuan extends BaseController
     {
         $data = $this->request->getJSON();
         try {
-            $this->conn->transBegin();
+            $this->conn->transException(true)->transStart();
             $this->pengajuan->insert(['user_id' => session()->get('uid'), 'klasifikasi_id' => $data->klasifikasi_id]);
             $data->id = $this->pengajuan->getInsertID();
             foreach ($data->subKlasifikasi as $key => $sub) {
@@ -115,12 +116,9 @@ class Pengajuan extends BaseController
             ];
             $this->sbu->insert($item);
             $data->persyaratan->id = $this->sbu->getInsertID();
-            if ($this->conn->transStatus()) {
-                $this->conn->transCommit();
-                return $this->respond($data);
-            }
-            throw new \Exception("Data gagal menyimpan", 1);
-        } catch (\Throwable $th) {
+            $this->conn->transComplete();
+            return $this->respond($data);
+        } catch (DatabaseException $th) {
             return  $this->fail($th->getMessage());
         }
     }
