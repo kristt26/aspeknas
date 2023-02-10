@@ -85,7 +85,7 @@ phpunit
 #-------------------------
 /vendor
 # vendor/
-/public/assets/berkas
+/berkas
 
 #-------------------------
 # IDE / Development Files
