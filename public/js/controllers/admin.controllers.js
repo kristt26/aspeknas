@@ -115,19 +115,19 @@ function pengajuanController($scope, pengajuanServices, pesan, helperServices, p
     $scope.datas = {};
     $scope.model = {};
     $scope.layout = "Klasifikasi";
-    $scope.itemSub={};
+    $scope.itemSub = {};
     $scope.tahapan = helperServices.tahapan;
     if (helperServices.lastPath == "pengajuan") {
         pengajuanServices.get().then(res => {
             $scope.datas = res;
             $scope.datas.pengajuan.forEach(element => {
-                element.klasifikasi = $scope.datas.klasifikasi.find(x=>x.id == element.klasifikasi_id);
+                element.klasifikasi = $scope.datas.klasifikasi.find(x => x.id == element.klasifikasi_id);
                 element.subPengajuan.forEach(element1 => {
-                    element1.detail = element.klasifikasi.subKlasifikasi.find(x=>x.id==element1.sub_klasifikasi_id);
-                    
+                    element1.detail = element.klasifikasi.subKlasifikasi.find(x => x.id == element1.sub_klasifikasi_id);
+
                 });
             });
-            
+
             console.log($scope.datas);
         })
     } else {
@@ -144,21 +144,33 @@ function pengajuanController($scope, pengajuanServices, pesan, helperServices, p
         })
     }
 
-    $scope.setSubKlasifikasi = (param)=>{
+    $scope.setSubKlasifikasi = (param) => {
         $scope.itemSub = param;
         console.log(param);
     }
 
-    $scope.setItemPengajuan = (param)=>{
-        var cek = $scope.tahapan.find(x=>x.tahapan == param.status);
-        $scope.limit = cek.id-1;
+    $scope.addSub = (param, klasifikasi) => {
+        param.klasifikasi = klasifikasi;
+        if (!$scope.model.subKlasifikasi)
+            $scope.model.subKlasifikasi = [];
+        $scope.model.subKlasifikasi.push(param);
+    }
+
+    $scope.removeItem = (param) => {
+        var index = $scope.model.subKlasifikasi.indexOf(param);
+        $scope.model.subKlasifikasi.splice(index, 1);
+    }
+
+    $scope.setItemPengajuan = (param) => {
+        var cek = $scope.tahapan.find(x => x.tahapan == param.status);
+        $scope.limit = cek.id - 1;
     }
 
     $scope.next = (item) => {
         $scope.layout = item;
         $scope.model.subTotal = 0;
         if (item == 'Detail Pembayaran') {
-            
+
             $scope.model.biaya = [];
             helperServices.biaya.forEach(element => {
                 var item = {};
@@ -194,39 +206,39 @@ function pengajuanController($scope, pengajuanServices, pesan, helperServices, p
                             onSuccess: function (result) {
                                 // changeResult('success', result);
                                 var item = {};
-                                item.order_id=res.order_id;
-                                item.pengajuan_id=res.id;
-                                item.nominal=res.subTotal;
-                                item.status=result.transaction_status;
-                                item.tanggal_transaksi=result.transaction_time;
-                                item.result=result;
-                                pembayaranServices.post(item).then(a=>{
+                                item.order_id = res.order_id;
+                                item.pengajuan_id = res.id;
+                                item.nominal = res.subTotal;
+                                item.status = result.transaction_status;
+                                item.tanggal_transaksi = result.transaction_time;
+                                item.result = result;
+                                pembayaranServices.post(item).then(a => {
                                     $scope.model = {};
                                     window.localStorage.removeItem('data');
-                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i => {
                                         window.location.href = helperServices.url + "pengajuan";
                                     })
                                 })
                             },
                             onPending: function (result) {
                                 var item = {};
-                                item.order_id=res.order_id;
-                                item.pengajuan_id=res.id;
-                                item.nominal=res.subTotal;
-                                item.status=result.transaction_status;
-                                item.tanggal_transaksi=result.transaction_time;
-                                item.result=result;
-                                pembayaranServices.post(item).then(a=>{
+                                item.order_id = res.order_id;
+                                item.pengajuan_id = res.id;
+                                item.nominal = res.subTotal;
+                                item.status = result.transaction_status;
+                                item.tanggal_transaksi = result.transaction_time;
+                                item.result = result;
+                                pembayaranServices.post(item).then(a => {
                                     $scope.model = {};
                                     window.localStorage.removeItem('data');
-                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i => {
                                         window.location.href = helperServices.url + "pengajuan";
                                     })
                                 })
                             }
                         });
                     })
-                    
+
                 })
             }
         })
@@ -250,28 +262,28 @@ function validasiPengajuanController($scope, validasiPengajuanServices, pesan, h
     $scope.datas = {};
     $scope.model = {};
     $scope.layout = "Klasifikasi";
-    $scope.itemSub={};
+    $scope.itemSub = {};
     $scope.tahapan = helperServices.tahapan;
     validasiPengajuanServices.get().then(res => {
         $scope.datas = res;
         $scope.datas.pengajuan.forEach(element => {
-            element.klasifikasi = $scope.datas.klasifikasi.find(x=>x.id == element.klasifikasi_id);
+            element.klasifikasi = $scope.datas.klasifikasi.find(x => x.id == element.klasifikasi_id);
             element.subPengajuan.forEach(element1 => {
-                element1.detail = element.klasifikasi.subKlasifikasi.find(x=>x.id==element1.sub_klasifikasi_id);
+                element1.detail = element.klasifikasi.subKlasifikasi.find(x => x.id == element1.sub_klasifikasi_id);
             });
         });
-        
+
         console.log($scope.datas);
     })
 
-    $scope.setSubKlasifikasi = (param)=>{
+    $scope.setSubKlasifikasi = (param) => {
         $scope.itemSub = param;
         console.log(param);
     }
 
-    $scope.setItemPengajuan = (param)=>{
-        var cek = $scope.tahapan.find(x=>x.tahapan == param.status);
-        $scope.limit = cek.id-1;
+    $scope.setItemPengajuan = (param) => {
+        var cek = $scope.tahapan.find(x => x.tahapan == param.status);
+        $scope.limit = cek.id - 1;
         $scope.model = param;
     }
 
@@ -279,7 +291,7 @@ function validasiPengajuanController($scope, validasiPengajuanServices, pesan, h
         $scope.layout = item;
         $scope.model.subTotal = 0;
         if (item == 'Detail Pembayaran') {
-            
+
             $scope.model.biaya = [];
             helperServices.biaya.forEach(element => {
                 var item = {};
@@ -316,39 +328,39 @@ function validasiPengajuanController($scope, validasiPengajuanServices, pesan, h
                             onSuccess: function (result) {
                                 // changeResult('success', result);
                                 var item = {};
-                                item.order_id=res.order_id;
-                                item.pengajuan_id=res.id;
-                                item.nominal=res.subTotal;
-                                item.status=result.transaction_status;
-                                item.tanggal_transaksi=result.transaction_time;
-                                item.result=result;
-                                pembayaranServices.post(item).then(a=>{
+                                item.order_id = res.order_id;
+                                item.pengajuan_id = res.id;
+                                item.nominal = res.subTotal;
+                                item.status = result.transaction_status;
+                                item.tanggal_transaksi = result.transaction_time;
+                                item.result = result;
+                                pembayaranServices.post(item).then(a => {
                                     $scope.model = {};
                                     window.localStorage.removeItem('data');
-                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i => {
                                         window.location.href = helperServices.url + "pengajuan";
                                     })
                                 })
                             },
                             onPending: function (result) {
                                 var item = {};
-                                item.order_id=res.order_id;
-                                item.pengajuan_id=res.id;
-                                item.nominal=res.subTotal;
-                                item.status=result.transaction_status;
-                                item.tanggal_transaksi=result.transaction_time;
-                                item.result=result;
-                                pembayaranServices.post(item).then(a=>{
+                                item.order_id = res.order_id;
+                                item.pengajuan_id = res.id;
+                                item.nominal = res.subTotal;
+                                item.status = result.transaction_status;
+                                item.tanggal_transaksi = result.transaction_time;
+                                item.result = result;
+                                pembayaranServices.post(item).then(a => {
                                     $scope.model = {};
                                     window.localStorage.removeItem('data');
-                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i => {
                                         window.location.href = helperServices.url + "pengajuan";
                                     })
                                 })
                             }
                         });
                     })
-                    
+
                 })
             }
         })
@@ -366,35 +378,35 @@ function validasiPengajuanController($scope, validasiPengajuanServices, pesan, h
         });
     }
 
-    
-    $scope.showListBerkas = (item)=>{
+
+    $scope.showListBerkas = (item) => {
         $scope.itemBerkas = item.persyaratan;
         console.log($scope.itemBerkas);
         // window.location.href = helperServices.url + "admin/pengajuan/berkas/" + item.id
     }
 
-    $scope.showBerkas=(item)=>{
+    $scope.showBerkas = (item) => {
         var myState = {
             pdf: null,
             currentPage: 1,
             zoom: 1
         }
-     
-        pdfjsLib.getDocument(helperServices.url + 'assets/berkas/'+ $scope.itemBerkas.akta).then((pdf) => {
+
+        pdfjsLib.getDocument(helperServices.url + 'assets/berkas/' + $scope.itemBerkas.akta).then((pdf) => {
             myState.pdf = pdf;
             render();
             $("#showItemBerkas").modal('show');
         });
         function render() {
             myState.pdf.getPage(myState.currentPage).then((page) => {
-         
+
                 var canvas = document.getElementById("pdf_renderer");
                 var ctx = canvas.getContext('2d');
-     
+
                 var viewport = page.getViewport(myState.zoom);
                 canvas.width = viewport.width;
                 canvas.height = viewport.height;
-         
+
                 page.render({
                     canvasContext: ctx,
                     viewport: viewport
@@ -404,7 +416,7 @@ function validasiPengajuanController($scope, validasiPengajuanServices, pesan, h
         $scope.itemBerkas = item;
     }
 
-    $scope.download = (item)=>{
+    $scope.download = (item) => {
         $http.get(helperServices.url + 'assets/berkas/' + item, { responseType: 'arraybuffer' }).then(function (response) {
             console.log(response.data);
             var file = new Blob([response.data], { type: 'application/pdf' });
@@ -419,28 +431,28 @@ function berkasPengajuanController($scope, validasiPengajuanServices, pesan, hel
     $scope.$emit("SendUp", "Berkas Pengjuan");
     $scope.datas = {};
     $scope.model = {};
-    $scope.itemSub={};
+    $scope.itemSub = {};
     $scope.tahapan = helperServices.tahapan;
     validasiPengajuanServices.getBerkas(helperServices.lastPath).then(res => {
         $scope.datas = res;
         $scope.datas.pengajuan.forEach(element => {
-            element.klasifikasi = $scope.datas.klasifikasi.find(x=>x.id == element.klasifikasi_id);
+            element.klasifikasi = $scope.datas.klasifikasi.find(x => x.id == element.klasifikasi_id);
             element.subPengajuan.forEach(element1 => {
-                element1.detail = element.klasifikasi.subKlasifikasi.find(x=>x.id==element1.sub_klasifikasi_id);
+                element1.detail = element.klasifikasi.subKlasifikasi.find(x => x.id == element1.sub_klasifikasi_id);
             });
         });
-        
+
         console.log($scope.datas);
     })
 
-    $scope.setSubKlasifikasi = (param)=>{
+    $scope.setSubKlasifikasi = (param) => {
         $scope.itemSub = param;
         console.log(param);
     }
 
-    $scope.setItemPengajuan = (param)=>{
-        var cek = $scope.tahapan.find(x=>x.tahapan == param.status);
-        $scope.limit = cek.id-1;
+    $scope.setItemPengajuan = (param) => {
+        var cek = $scope.tahapan.find(x => x.tahapan == param.status);
+        $scope.limit = cek.id - 1;
         $scope.model = param;
     }
 
@@ -448,7 +460,7 @@ function berkasPengajuanController($scope, validasiPengajuanServices, pesan, hel
         $scope.layout = item;
         $scope.model.subTotal = 0;
         if (item == 'Detail Pembayaran') {
-            
+
             $scope.model.biaya = [];
             helperServices.biaya.forEach(element => {
                 var item = {};
@@ -485,39 +497,39 @@ function berkasPengajuanController($scope, validasiPengajuanServices, pesan, hel
                             onSuccess: function (result) {
                                 // changeResult('success', result);
                                 var item = {};
-                                item.order_id=res.order_id;
-                                item.pengajuan_id=res.id;
-                                item.nominal=res.subTotal;
-                                item.status=result.transaction_status;
-                                item.tanggal_transaksi=result.transaction_time;
-                                item.result=result;
-                                pembayaranServices.post(item).then(a=>{
+                                item.order_id = res.order_id;
+                                item.pengajuan_id = res.id;
+                                item.nominal = res.subTotal;
+                                item.status = result.transaction_status;
+                                item.tanggal_transaksi = result.transaction_time;
+                                item.result = result;
+                                pembayaranServices.post(item).then(a => {
                                     $scope.model = {};
                                     window.localStorage.removeItem('data');
-                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i => {
                                         window.location.href = helperServices.url + "pengajuan";
                                     })
                                 })
                             },
                             onPending: function (result) {
                                 var item = {};
-                                item.order_id=res.order_id;
-                                item.pengajuan_id=res.id;
-                                item.nominal=res.subTotal;
-                                item.status=result.transaction_status;
-                                item.tanggal_transaksi=result.transaction_time;
-                                item.result=result;
-                                pembayaranServices.post(item).then(a=>{
+                                item.order_id = res.order_id;
+                                item.pengajuan_id = res.id;
+                                item.nominal = res.subTotal;
+                                item.status = result.transaction_status;
+                                item.tanggal_transaksi = result.transaction_time;
+                                item.result = result;
+                                pembayaranServices.post(item).then(a => {
                                     $scope.model = {};
                                     window.localStorage.removeItem('data');
-                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i=>{
+                                    pesan.dialog('Proses Berhasil', 'Yes', 'Tidak').then(i => {
                                         window.location.href = helperServices.url + "pengajuan";
                                     })
                                 })
                             }
                         });
                     })
-                    
+
                 })
             }
         })
@@ -535,8 +547,8 @@ function berkasPengajuanController($scope, validasiPengajuanServices, pesan, hel
         });
     }
 
-    
-    $scope.berkas = (item)=>{
+
+    $scope.berkas = (item) => {
         window.location.href = helperServices.url + "admin/pengajuan/berkas/" + item.id
     }
 }

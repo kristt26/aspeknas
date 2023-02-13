@@ -26,10 +26,32 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">Sub Klasifikasi</label>
-                                        <select class="form-control form-control-sm select2" ng-disabled="!klasifikasi" multiple=[] ng-options="item as (item.kode_kbli + ' - ' + item.judul_kbli) for item in klasifikasi.subKlasifikasi" ng-model="model.subKlasifikasi"></select>
+                                        <select class="form-control form-control-sm select2" ng-disabled="!klasifikasi" ng-options="item as (item.kode_kbli + ' - ' + item.judul_kbli) for item in klasifikasi.subKlasifikasi" ng-model="subKlasifikasi" ng-change="addSub(subKlasifikasi, klasifikasi.klasifikasi)"></select>
                                     </div>
                                 </div>
                             </div>
+                            <table class="table table-bordered" ng-show="model.subKlasifikasi && model.subKlasifikasi.length!=0">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Klasifikasi</th>
+                                        <th>Kode KBLI</th>
+                                        <th>Judul KBLI</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in model.subKlasifikasi">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.klasifikasi}}</td>
+                                        <td>{{item.kode_kbli}}</td>
+                                        <td>{{item.judul_kbli}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" ng-click="removeItem(item)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                             <div class="form-group d-flex justify-content-end">
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="next('Persyaratan')">Next</button>

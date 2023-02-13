@@ -38,6 +38,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i> -->
                 </div>
+                <img src="<?= base_url('') ?>/logo.jpeg" alt="" width="15%">
                 <div class="sidebar-brand-text mx-3">ASPEKNAS</div>
             </a>
 
